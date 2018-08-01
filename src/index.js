@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import registerServiceWorker from './registerServiceWorker';
-import App from "./App.js";
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import registerServiceWorker from "./registerServiceWorker";
+import Pokemon from "./pokemon.js";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Pokemon />, document.getElementById("root"));
 registerServiceWorker();

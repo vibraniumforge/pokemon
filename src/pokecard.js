@@ -1,13 +1,12 @@
 import React from "react";
+import "./pokecard.css";
 
-class PokeCard extends React.Component {
+class PokeCard extends React.PureComponent {
   render() {
     return (
-      <div className="pokecard">
+      <div>
         <p>
-          #{this.props.number}
-          <br />
-          {this.props.name}
+          <span>#{this.props.number}</span> <span>{this.props.name}</span>
         </p>
       </div>
     );
