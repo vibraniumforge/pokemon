@@ -10,12 +10,13 @@ class PokemonCards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pokemonList: []
+      pokemonList: [],
+      sortBy: "default"
     };
 
-    this.sort = this.sort.bind(this);
-    this.reverseSort = this.reverseSort.bind(this);
-    this.sortByOriginalOrder = this.sortByOriginalOrder.bind(this);
+    this.sortAlphabetically = this.sortAlphabetically.bind(this);
+    this.sortReverse = this.sortReverse.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -26,34 +27,38 @@ class PokemonCards extends React.Component {
     });
   }
 
-  sortByOriginalOrder() {
-    axios.get(pokemonUrl).then(data => {
-      this.setState({
-        pokemonList: data.data.results
-      });
-    });
-  }
-
-  sort() {
-    let sortedList = this.state.pokemonList.sort(function(a, b) {
+  sortAlphabetically() {
+    return this.state.pokemonList.slice().sort(function(a, b) {
       if (a.name > b.name) return 1;
       else if (a.name < b.name) return -1;
       return 0;
     });
-    this.setState({ pokemonList: sortedList });
   }
 
-  reverseSort() {
-    let reverseSortedList = this.state.pokemonList.sort(function(a, b) {
+  sortReverse() {
+    return this.state.pokemonList.slice().sort(function(a, b) {
       if (a.name > b.name) return -1;
       else if (a.name < b.name) return 1;
       return 0;
     });
-    this.setState({ pokemonList: reverseSortedList });
+  }
+
+  handleClick(e) {
+    this.setState({ sortBy: e.target.name });
+  }
+
+  sortChooser() {
+    if (this.state.sortBy === "alphabetical") {
+      return this.sortAlphabetically();
+    } else if (this.state.sortBy === "reverse") {
+      return this.sortReverse();
+    } else if (this.state.sortBy === "default") {
+      return this.state.pokemonList;
+    }
   }
 
   render() {
-    const pokes = this.state.pokemonList.map((poke, pokeIndex) => (
+    const pokes = this.sortChooser().map((poke, pokeIndex) => (
       <ol className="pokecard" key={pokeIndex}>
         <li>
           <PokeCard
@@ -77,16 +82,27 @@ class PokemonCards extends React.Component {
         <br />
         <h2>List of all Pokemon:</h2>
         <br />
-        <button type="button" className="button" onClick={this.sort}>
+        <button
+          type="button"
+          className="button"
+          onClick={this.handleClick}
+          name="alphabetical"
+        >
           Sort By Name
         </button>
-        <button type="button" className="button" onClick={this.reverseSort}>
+        <button
+          type="button"
+          className="button"
+          onClick={this.handleClick}
+          name="reverse"
+        >
           Sort By Reverse Name
         </button>
         <button
           type="button"
           className="button"
-          onClick={this.sortByOriginalOrder}
+          onClick={this.handleClick}
+          name="default"
         >
           Reset List
         </button>
